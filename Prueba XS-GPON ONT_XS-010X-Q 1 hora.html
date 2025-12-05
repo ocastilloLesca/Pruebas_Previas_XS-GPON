@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prueba XS-GPON ONT_XS-010X-Q 1 hora</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #00a8cc 0%, #0891b2 50%, #0e7490 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 4px solid #00a8cc;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 15px;
+    padding: 30px;
+}
+.coopelesca-logo {
+    color: #00a8cc;
+    font-size: 3em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,168,204,0.3);
+}
+.header h1 {
+    color: #0e7490;
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+.header h2 {
+    color: #0891b2;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+.version-badge {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+}
+.company-info {
+    background: linear-gradient(135deg, #00a8cc 0%, #0891b2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.company-info h3 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+.company-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+.company-item {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    border-left: 5px solid #00a8cc;
+    transition: transform 0.3s ease;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+.stat-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #0891b2;
+    margin-bottom: 5px;
+}
+.stat-label {
+    color: #0e7490;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+.chart-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-top: 4px solid #00a8cc;
+}
+.chart-title {
+    font-size: 1.2em;
+    color: #0e7490;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+canvas {
+    max-height: 350px !important;
+}
+.data-table {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-top: 30px;
+}
+.table-header {
+    background: linear-gradient(135deg, #00a8cc 0%, #0891b2 100%);
+    color: white;
+    padding: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+}
+.table-content {
+    max-height: 500px;
+    overflow-y: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #e0f2fe;
+}
+th {
+    background: linear-gradient(135deg, #00a8cc 0%, #0891b2 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    font-weight: bold;
+    z-index: 10;
+}
+tr:hover {
+    background: #f0f9ff;
+}
+td {
+    color: #0e7490;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="coopelesca-logo">🌐 COOPELESCA R.L.</div>
+<h1>Prueba XS-GPON ONT_XS-010X-Q 1 hora</h1>
+<h2>Centro de Operaciones de Red - Unidad de Ingeniería</h2>
+<span class="version-badge">Script de Pruebas de velocidad de red v15.0</span>
+</div>
+
+<div class="company-info">
+<h3>📊 Información de la prueba</h3>
+<div class="company-details">
+<div class="company-item"><strong>Servidor:</strong> 10.24.87.10:5201</div>
+<div class="company-item"><strong>Prueba de Ping hacia:</strong> 8.8.8.8</div>
+<div class="company-item"><strong>Protocolo (TCP, UDP):</strong> AMBOS</div>
+<div class="company-item"><strong>Inicio:</strong> 2025-12-05 11:43:37</div>
+<div class="company-item"><strong>Fin:</strong> 2025-12-05 12:44:01</div>
+<div class="company-item"><strong>Intervalo:</strong> 60 seg</div>
+</div>
+</div>
+
+<div id="stats" class="stats-grid"></div>
+
+<div class="charts-container" id="charts"></div>
+
+<div class="data-table">
+<div class="table-header">📋 Registro Detallado de Mediciones</div>
+<div class="table-content">
+<table>
+<thead id="tableHead"></thead>
+<tbody id="dataTable"></tbody>
+</table>
+</div>
+</div>
+</div>
+
+<script>
+const proto = 'AMBOS';
+const pingHost = '8.8.8.8';
+const coopelescaColors = {
+    primary: '#00a8cc',
+    secondary: '#0891b2',
+    tertiary: '#0e7490',
+    success: '#22c55e',
+    danger: '#e74c3c',
+    warning: '#f39c12'
+};
+
+function hexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+}
+
+const baseChartConfig = {
+    type: 'line',
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                backgroundColor: 'rgba(0, 168, 204, 0.9)',
+                titleColor: 'white',
+                bodyColor: 'white',
+                borderColor: '#00a8cc',
+                borderWidth: 2
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { color: coopelescaColors.tertiary },
+                grid: { color: 'rgba(0, 168, 204, 0.1)' }
+            },
+            x: {
+                ticks: { color: coopelescaColors.tertiary },
+                grid: { color: 'rgba(0, 168, 204, 0.1)' }
+            }
+        },
+        elements: {
+            line: {
+                tension: 0.4,
+                borderWidth: 3
+            },
+            point: {
+                radius: 4,
+                hoverRadius: 7,
+                borderWidth: 2,
+                backgroundColor: 'white'
+            }
+        }
+    }
+};
+
+const charts = {};
+let dataPoints = [];
+
+function createChart(id, title, color) {
+    const canvas = document.createElement('canvas');
+    canvas.id = id;
+    const card = document.createElement('div');
+    card.className = 'chart-card';
+    card.innerHTML = '<div class="chart-title">' + title + '</div>';
+    card.appendChild(canvas);
+    document.getElementById('charts').appendChild(card);
+    
+    const bgColor = color.startsWith('#') ? hexToRgba(color, 0.1) : color.replace('rgb', 'rgba').replace(')', ', 0.1)');
+    
+    return new Chart(canvas, {
+        ...baseChartConfig,
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                borderColor: color,
+                backgroundColor: bgColor,
+                fill: true,
+                pointBackgroundColor: 'white',
+                pointBorderColor: color
+            }]
+        }
+    });
+}
+
+function initCharts() {
+    if (proto === 'TCP' || proto === 'AMBOS') {
+        charts.tcp_dl = createChart('tcpDlChart', '📥 TCP Descarga (Mbps)', coopelescaColors.primary);
+        charts.tcp_ul = createChart('tcpUlChart', '📤 TCP Subida (Mbps)', coopelescaColors.secondary);
+        charts.tcp_retrans_dl = createChart('tcpRetransDl', '🔄 Retransmisiones TCP DL', coopelescaColors.warning);
+        charts.tcp_retrans_ul = createChart('tcpRetransUl', '🔄 Retransmisiones TCP UL', '#f39c12');
+    }
+    
+    if (proto === 'UDP' || proto === 'AMBOS') {
+        charts.udp_dl = createChart('udpDlChart', '📥 UDP Descarga (Mbps)', coopelescaColors.success);
+        charts.udp_ul = createChart('udpUlChart', '📤 UDP Subida (Mbps)', '#16a34a');
+        charts.udp_jitter_dl = createChart('udpJitterDl', '⏱️ Jitter UDP DL (ms)', '#3b82f6');
+        charts.udp_jitter_ul = createChart('udpJitterUl', '⏱️ Jitter UDP UL (ms)', '#2563eb');
+        charts.udp_loss_dl = createChart('udpLossDl', '📉 Pérdida UDP DL (%)', coopelescaColors.danger);
+        charts.udp_loss_ul = createChart('udpLossUl', '📉 Pérdida UDP UL (%)', '#dc2626');
+    }
+    
+    charts.ping = createChart('pingChart', '🏓 Latencia Ping ' + pingHost + ' (ms)', coopelescaColors.tertiary);
+    charts.ping_loss = createChart('pingLossChart', '📉 Pérdida Ping ' + pingHost + ' (%)', coopelescaColors.danger);
+}
+
+function addDataPoint(data) {
+    dataPoints.push(data);
+}
+
+function renderCharts() {
+    if (dataPoints.length === 0) {
+        document.body.innerHTML = '<h1 style="text-align:center;margin-top:50px;color:white;">Sin datos para mostrar</h1>';
+        return;
+    }
+    
+    dataPoints.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    
+    const totals = {};
+    Object.keys(charts).forEach(k => totals[k] = 0);
+    
+    dataPoints.forEach(data => {
+        const timeLabel = new Date(data.timestamp).toLocaleTimeString();
+        
+        Object.keys(charts).forEach(chartKey => {
+            if (data[chartKey] !== undefined && data[chartKey] !== null) {
+                charts[chartKey].data.labels.push(timeLabel);
+                const val = parseFloat(data[chartKey]) || 0;
+                charts[chartKey].data.datasets[0].data.push(val);
+                totals[chartKey] += val;
+            }
+        });
+    });
+    
+    Object.values(charts).forEach(c => c.update());
+    
+    const n = dataPoints.length;
+    let statsHtml = '<div class="stat-card"><div class="stat-value">' + n + '</div><div class="stat-label">Mediciones</div></div>';
+    
+    if (proto === 'TCP' || proto === 'AMBOS') {
+        statsHtml += '<div class="stat-card"><div class="stat-value">' + (totals.tcp_dl/n).toFixed(2) + '</div><div class="stat-label">TCP DL Promedio (Mbps)</div></div>';
+        statsHtml += '<div class="stat-card"><div class="stat-value">' + (totals.tcp_ul/n).toFixed(2) + '</div><div class="stat-label">TCP UL Promedio (Mbps)</div></div>';
+        statsHtml += '<div class="stat-card"><div class="stat-value">' + Math.round(totals.tcp_retrans_dl) + '</div><div class="stat-label">Retrans TCP DL Total</div></div>';
+        statsHtml += '<div class="stat-card"><div class="stat-value">' + Math.round(totals.tcp_retrans_ul) + '</div><div class="stat-label">Retrans TCP UL Total</div></div>';
+    }
+    
+    if (proto === 'UDP' || proto === 'AMBOS') {
+        statsHtml += '<div class="stat-card"><div class="stat-value">' + (totals.udp_dl/n).toFixed(2) + '</div><div class="stat-label">UDP DL Promedio (Mbps)</div></div>';
+        statsHtml += '<div class="stat-card"><div class="stat-value">' + (totals.udp_ul/n).toFixed(2) + '</div><div class="stat-label">UDP UL Promedio (Mbps)</div></div>';
+        statsHtml += '<div class="stat-card"><div class="stat-value">' + (totals.udp_jitter_dl/n).toFixed(3) + '</div><div class="stat-label">Jitter DL Prom (ms)</div></div>';
+        statsHtml += '<div class="stat-card"><div class="stat-value">' + (totals.udp_jitter_ul/n).toFixed(3) + '</div><div class="stat-label">Jitter UL Prom (ms)</div></div>';
+    }
+    
+    statsHtml += '<div class="stat-card"><div class="stat-value">' + (totals.ping/n).toFixed(2) + '</div><div class="stat-label">Ping Promedio (ms)</div></div>';
+    statsHtml += '<div class="stat-card"><div class="stat-value">' + (totals.ping_loss/n).toFixed(2) + '</div><div class="stat-label">Pérdida Ping Prom (%)</div></div>';
+    
+    document.getElementById('stats').innerHTML = statsHtml;
+    
+    let thHtml = '<tr><th>Hora</th>';
+    if (proto === 'TCP' || proto === 'AMBOS') {
+        thHtml += '<th>TCP DL (Mbps)</th><th>TCP UL (Mbps)</th><th>Retrans DL</th><th>Retrans UL</th>';
+    }
+    if (proto === 'UDP' || proto === 'AMBOS') {
+        thHtml += '<th>UDP DL (Mbps)</th><th>UDP UL (Mbps)</th><th>Jitter DL (ms)</th><th>Jitter UL (ms)</th><th>Loss DL (%)</th><th>Loss UL (%)</th>';
+    }
+    thHtml += '<th>Ping (ms)</th><th>Loss (%)</th></tr>';
+    document.getElementById('tableHead').innerHTML = thHtml;
+    
+    const tbody = document.getElementById('dataTable');
+    tbody.innerHTML = '';
+    for (let i = dataPoints.length - 1; i >= 0; i--) {
+        const d = dataPoints[i];
+        let row = '<tr><td>' + new Date(d.timestamp).toLocaleString() + '</td>';
+        if (proto === 'TCP' || proto === 'AMBOS') {
+            row += '<td>' + (d.tcp_dl || 0).toFixed(2) + '</td>';
+            row += '<td>' + (d.tcp_ul || 0).toFixed(2) + '</td>';
+            row += '<td>' + Math.round(d.tcp_retrans_dl || 0) + '</td>';
+            row += '<td>' + Math.round(d.tcp_retrans_ul || 0) + '</td>';
+        }
+        if (proto === 'UDP' || proto === 'AMBOS') {
+            row += '<td>' + (d.udp_dl || 0).toFixed(2) + '</td>';
+            row += '<td>' + (d.udp_ul || 0).toFixed(2) + '</td>';
+            row += '<td>' + (d.udp_jitter_dl || 0).toFixed(3) + '</td>';
+            row += '<td>' + (d.udp_jitter_ul || 0).toFixed(3) + '</td>';
+            row += '<td>' + (d.udp_loss_dl || 0).toFixed(2) + '</td>';
+            row += '<td>' + (d.udp_loss_ul || 0).toFixed(2) + '</td>';
+        }
+        row += '<td>' + (d.ping || 0).toFixed(2) + '</td>';
+        row += '<td>' + (d.ping_loss || 0).toFixed(2) + '</td></tr>';
+        tbody.innerHTML += row;
+    }
+}
+
+initCharts();
+
+addDataPoint({timestamp:'2025-12-05 11:43:37',tcp_dl:8144.550000,tcp_ul:9280.670000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2477.000000,udp_dl:7917.140000,udp_ul:9509.430000,udp_jitter_dl:0.008779,udp_jitter_ul:0.001534,udp_loss_dl:0.032621,udp_loss_ul:0.986102,ping:42.845000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:44:37',tcp_dl:8149.320000,tcp_ul:8795.510000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3676.000000,udp_dl:7924.550000,udp_ul:9561.210000,udp_jitter_dl:0.000870,udp_jitter_ul:0.000395,udp_loss_dl:0.013182,udp_loss_ul:1.075433,ping:42.847000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:45:37',tcp_dl:8128.940000,tcp_ul:8916.600000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3318.000000,udp_dl:7138.660000,udp_ul:9560.370000,udp_jitter_dl:0.001315,udp_jitter_ul:0.001213,udp_loss_dl:0.006229,udp_loss_ul:1.094254,ping:42.806000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:46:37',tcp_dl:8143.430000,tcp_ul:9296.360000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1965.000000,udp_dl:7644.980000,udp_ul:9524.400000,udp_jitter_dl:0.000904,udp_jitter_ul:0.001734,udp_loss_dl:0.008604,udp_loss_ul:0.673399,ping:42.817000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:47:37',tcp_dl:8125.790000,tcp_ul:9300.540000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1976.000000,udp_dl:7944.290000,udp_ul:8653.400000,udp_jitter_dl:0.001419,udp_jitter_ul:0.000815,udp_loss_dl:0.010029,udp_loss_ul:0.310837,ping:42.840000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:48:37',tcp_dl:8139.060000,tcp_ul:9283.790000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2629.000000,udp_dl:7874.370000,udp_ul:9112.150000,udp_jitter_dl:0.000942,udp_jitter_ul:0.000994,udp_loss_dl:0.026913,udp_loss_ul:0.558565,ping:42.831000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:49:37',tcp_dl:8115.940000,tcp_ul:9279.750000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2573.000000,udp_dl:7918.850000,udp_ul:8516.940000,udp_jitter_dl:0.000882,udp_jitter_ul:0.001761,udp_loss_dl:0.024041,udp_loss_ul:0.280162,ping:42.754000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:50:37',tcp_dl:8151.340000,tcp_ul:9313.160000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1908.000000,udp_dl:7922.540000,udp_ul:8503.940000,udp_jitter_dl:0.001150,udp_jitter_ul:0.003189,udp_loss_dl:0.037187,udp_loss_ul:0.176771,ping:42.932000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:51:37',tcp_dl:8119.560000,tcp_ul:9296.440000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2441.000000,udp_dl:7472.470000,udp_ul:9560.680000,udp_jitter_dl:0.000930,udp_jitter_ul:0.004839,udp_loss_dl:0.027028,udp_loss_ul:0.999446,ping:42.849000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:52:37',tcp_dl:8108.020000,tcp_ul:9255.960000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1659.000000,udp_dl:7168.290000,udp_ul:9557.280000,udp_jitter_dl:0.001572,udp_jitter_ul:0.000223,udp_loss_dl:0.004200,udp_loss_ul:1.443467,ping:42.782000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:53:37',tcp_dl:8146.260000,tcp_ul:9295.170000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2420.000000,udp_dl:7921.810000,udp_ul:9493.070000,udp_jitter_dl:0.000928,udp_jitter_ul:0.000785,udp_loss_dl:0.054177,udp_loss_ul:0.709365,ping:42.823000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:54:37',tcp_dl:8149.010000,tcp_ul:9312.130000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1610.000000,udp_dl:7554.320000,udp_ul:8646.720000,udp_jitter_dl:0.001021,udp_jitter_ul:0.001326,udp_loss_dl:0.004599,udp_loss_ul:0.393936,ping:42.822000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:55:37',tcp_dl:8145.740000,tcp_ul:9225.110000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3036.000000,udp_dl:7433.070000,udp_ul:9560.880000,udp_jitter_dl:0.001033,udp_jitter_ul:0.000559,udp_loss_dl:0.009909,udp_loss_ul:1.381197,ping:42.753000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:56:37',tcp_dl:8147.230000,tcp_ul:8898.080000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2358.000000,udp_dl:7961.240000,udp_ul:9524.500000,udp_jitter_dl:0.001244,udp_jitter_ul:0.002754,udp_loss_dl:0.008611,udp_loss_ul:0.779103,ping:42.778000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:57:37',tcp_dl:8137.780000,tcp_ul:9267.960000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2113.000000,udp_dl:7912.870000,udp_ul:9561.200000,udp_jitter_dl:0.001195,udp_jitter_ul:0.000595,udp_loss_dl:0.061202,udp_loss_ul:0.887984,ping:42.834000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:58:37',tcp_dl:8114.320000,tcp_ul:8901.740000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1924.000000,udp_dl:7520.090000,udp_ul:9164.580000,udp_jitter_dl:0.000832,udp_jitter_ul:0.001686,udp_loss_dl:0.045428,udp_loss_ul:0.599784,ping:42.788000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 11:59:37',tcp_dl:8143.990000,tcp_ul:8833.080000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2692.000000,udp_dl:7958.340000,udp_ul:9171.730000,udp_jitter_dl:0.001056,udp_jitter_ul:0.001513,udp_loss_dl:0.053519,udp_loss_ul:0.931540,ping:42.833000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:00:37',tcp_dl:8144.720000,tcp_ul:9255.110000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2082.000000,udp_dl:7911.700000,udp_ul:9561.510000,udp_jitter_dl:0.000909,udp_jitter_ul:0.002076,udp_loss_dl:0.068973,udp_loss_ul:0.990617,ping:42.821000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:01:37',tcp_dl:8133.350000,tcp_ul:8908.580000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2074.000000,udp_dl:7972.320000,udp_ul:9235.890000,udp_jitter_dl:0.002960,udp_jitter_ul:0.001568,udp_loss_dl:0.005811,udp_loss_ul:0.782290,ping:42.827000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:02:37',tcp_dl:8149.520000,tcp_ul:9271.710000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1887.000000,udp_dl:7951.250000,udp_ul:9468.050000,udp_jitter_dl:0.001287,udp_jitter_ul:0.000696,udp_loss_dl:0.013691,udp_loss_ul:0.803826,ping:42.791000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:03:37',tcp_dl:8128.470000,tcp_ul:9260.810000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1478.000000,udp_dl:7157.110000,udp_ul:9106.130000,udp_jitter_dl:0.000989,udp_jitter_ul:0.002595,udp_loss_dl:0.000194,udp_loss_ul:0.536127,ping:42.835000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:04:37',tcp_dl:8118.640000,tcp_ul:9263.110000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2655.000000,udp_dl:7924.770000,udp_ul:8745.360000,udp_jitter_dl:0.000991,udp_jitter_ul:0.002106,udp_loss_dl:0.013824,udp_loss_ul:0.655018,ping:42.812000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:05:37',tcp_dl:8150.700000,tcp_ul:9242.420000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2636.000000,udp_dl:7917.340000,udp_ul:9559.590000,udp_jitter_dl:0.001025,udp_jitter_ul:0.000764,udp_loss_dl:0.021238,udp_loss_ul:0.957847,ping:42.761000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:06:37',tcp_dl:8138.620000,tcp_ul:9296.360000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2874.000000,udp_dl:7931.120000,udp_ul:9533.400000,udp_jitter_dl:0.000868,udp_jitter_ul:0.000977,udp_loss_dl:0.017318,udp_loss_ul:1.190280,ping:42.801000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:07:37',tcp_dl:8043.850000,tcp_ul:8917.850000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2389.000000,udp_dl:7967.800000,udp_ul:9561.060000,udp_jitter_dl:0.001251,udp_jitter_ul:0.000624,udp_loss_dl:0.018808,udp_loss_ul:1.160639,ping:42.847000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:08:37',tcp_dl:8119.980000,tcp_ul:9295.700000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2224.000000,udp_dl:7968.470000,udp_ul:9326.380000,udp_jitter_dl:0.001406,udp_jitter_ul:0.000744,udp_loss_dl:0.008342,udp_loss_ul:0.909298,ping:42.821000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:09:37',tcp_dl:8150.320000,tcp_ul:9308.780000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1219.000000,udp_dl:7468.350000,udp_ul:9560.570000,udp_jitter_dl:0.001036,udp_jitter_ul:0.003149,udp_loss_dl:0.045247,udp_loss_ul:1.001735,ping:42.839000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:10:37',tcp_dl:8101.760000,tcp_ul:9319.210000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1324.000000,udp_dl:7966.070000,udp_ul:9527.300000,udp_jitter_dl:0.000838,udp_jitter_ul:0.001287,udp_loss_dl:0.014595,udp_loss_ul:1.108607,ping:42.838000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:11:37',tcp_dl:8113.020000,tcp_ul:9263.000000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3331.000000,udp_dl:7950.610000,udp_ul:8514.460000,udp_jitter_dl:0.002859,udp_jitter_ul:0.000990,udp_loss_dl:0.019256,udp_loss_ul:0.271156,ping:42.815000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:12:37',tcp_dl:8145.530000,tcp_ul:9302.660000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2630.000000,udp_dl:7940.840000,udp_ul:8645.300000,udp_jitter_dl:0.001436,udp_jitter_ul:0.002478,udp_loss_dl:0.012163,udp_loss_ul:0.241472,ping:42.824000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:13:37',tcp_dl:8117.250000,tcp_ul:9311.860000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1272.000000,udp_dl:8976.010000,udp_ul:9560.990000,udp_jitter_dl:0.002691,udp_jitter_ul:0.000915,udp_loss_dl:8.357625,udp_loss_ul:0.990111,ping:42.828000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:14:37',tcp_dl:8031.510000,tcp_ul:8827.940000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3334.000000,udp_dl:7938.300000,udp_ul:9560.160000,udp_jitter_dl:0.001163,udp_jitter_ul:0.001205,udp_loss_dl:0.009774,udp_loss_ul:1.227693,ping:42.814000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:15:37',tcp_dl:8152.210000,tcp_ul:9294.660000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2299.000000,udp_dl:7150.740000,udp_ul:9323.930000,udp_jitter_dl:0.001676,udp_jitter_ul:0.000635,udp_loss_dl:0.001814,udp_loss_ul:0.586214,ping:42.821000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:16:37',tcp_dl:8085.990000,tcp_ul:9233.680000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3260.000000,udp_dl:7937.810000,udp_ul:9559.740000,udp_jitter_dl:0.000922,udp_jitter_ul:0.001523,udp_loss_dl:0.016223,udp_loss_ul:1.006718,ping:42.835000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:17:37',tcp_dl:8108.220000,tcp_ul:9254.470000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2950.000000,udp_dl:7199.210000,udp_ul:8651.370000,udp_jitter_dl:0.000893,udp_jitter_ul:0.004233,udp_loss_dl:0.006821,udp_loss_ul:0.162908,ping:42.798000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:18:37',tcp_dl:8037.840000,tcp_ul:8913.710000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2253.000000,udp_dl:7944.510000,udp_ul:9558.960000,udp_jitter_dl:0.000984,udp_jitter_ul:0.004041,udp_loss_dl:0.014839,udp_loss_ul:1.032980,ping:42.850000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:19:37',tcp_dl:8093.720000,tcp_ul:9266.250000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2693.000000,udp_dl:7973.540000,udp_ul:9558.890000,udp_jitter_dl:0.000848,udp_jitter_ul:0.001111,udp_loss_dl:0.015134,udp_loss_ul:0.930746,ping:42.855000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:20:37',tcp_dl:8151.100000,tcp_ul:9298.110000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2901.000000,udp_dl:7577.760000,udp_ul:9558.780000,udp_jitter_dl:0.002106,udp_jitter_ul:0.000964,udp_loss_dl:0.000520,udp_loss_ul:1.076505,ping:42.750000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:21:37',tcp_dl:8149.550000,tcp_ul:9279.320000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3206.000000,udp_dl:7952.600000,udp_ul:8515.640000,udp_jitter_dl:0.000868,udp_jitter_ul:0.001276,udp_loss_dl:0.018988,udp_loss_ul:0.108225,ping:42.769000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:22:37',tcp_dl:8147.070000,tcp_ul:8809.310000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2583.000000,udp_dl:7181.720000,udp_ul:9562.520000,udp_jitter_dl:0.001302,udp_jitter_ul:0.000471,udp_loss_dl:0.006224,udp_loss_ul:1.174284,ping:42.813000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:23:37',tcp_dl:8114.690000,tcp_ul:8522.390000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2446.000000,udp_dl:7951.240000,udp_ul:9543.580000,udp_jitter_dl:0.001079,udp_jitter_ul:0.000991,udp_loss_dl:0.005157,udp_loss_ul:0.842368,ping:42.796000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:24:37',tcp_dl:8143.670000,tcp_ul:9290.160000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2030.000000,udp_dl:7955.520000,udp_ul:8516.850000,udp_jitter_dl:0.003078,udp_jitter_ul:0.002655,udp_loss_dl:0.037790,udp_loss_ul:0.144406,ping:42.779000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:25:37',tcp_dl:8149.600000,tcp_ul:9244.660000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2417.000000,udp_dl:7337.450000,udp_ul:9556.460000,udp_jitter_dl:0.004991,udp_jitter_ul:0.001378,udp_loss_dl:0.006218,udp_loss_ul:0.942997,ping:42.825000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:26:37',tcp_dl:8150.810000,tcp_ul:9255.790000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1633.000000,udp_dl:7753.050000,udp_ul:8737.570000,udp_jitter_dl:0.001028,udp_jitter_ul:0.001465,udp_loss_dl:0.005736,udp_loss_ul:0.434208,ping:42.741000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:27:37',tcp_dl:8151.650000,tcp_ul:9307.990000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1426.000000,udp_dl:7965.350000,udp_ul:9558.450000,udp_jitter_dl:0.002083,udp_jitter_ul:0.001055,udp_loss_dl:0.010933,udp_loss_ul:0.882249,ping:42.749000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:28:37',tcp_dl:8146.540000,tcp_ul:9177.480000,tcp_retrans_dl:0.000000,tcp_retrans_ul:4586.000000,udp_dl:7205.060000,udp_ul:8634.390000,udp_jitter_dl:0.001620,udp_jitter_ul:0.000721,udp_loss_dl:0.008101,udp_loss_ul:0.250764,ping:42.794000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:29:37',tcp_dl:8072.780000,tcp_ul:9283.290000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1811.000000,udp_dl:7903.410000,udp_ul:9346.370000,udp_jitter_dl:0.003932,udp_jitter_ul:0.001438,udp_loss_dl:0.010901,udp_loss_ul:0.649920,ping:42.853000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:30:37',tcp_dl:8079.440000,tcp_ul:9302.640000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2088.000000,udp_dl:7960.050000,udp_ul:9546.900000,udp_jitter_dl:0.000993,udp_jitter_ul:0.000412,udp_loss_dl:0.009282,udp_loss_ul:0.851102,ping:42.829000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:31:37',tcp_dl:8133.960000,tcp_ul:9311.470000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1339.000000,udp_dl:7815.370000,udp_ul:9558.420000,udp_jitter_dl:0.000779,udp_jitter_ul:0.000899,udp_loss_dl:0.029960,udp_loss_ul:1.002567,ping:42.815000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:32:37',tcp_dl:8043.760000,tcp_ul:9306.340000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2685.000000,udp_dl:7463.820000,udp_ul:9560.650000,udp_jitter_dl:0.001410,udp_jitter_ul:0.002285,udp_loss_dl:0.014833,udp_loss_ul:0.973310,ping:42.828000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:33:37',tcp_dl:8141.820000,tcp_ul:9274.240000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2634.000000,udp_dl:8839.640000,udp_ul:8515.740000,udp_jitter_dl:0.002504,udp_jitter_ul:0.001409,udp_loss_dl:7.054298,udp_loss_ul:0.362206,ping:42.832000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:34:37',tcp_dl:8113.240000,tcp_ul:9268.520000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2774.000000,udp_dl:7455.130000,udp_ul:9227.940000,udp_jitter_dl:0.001649,udp_jitter_ul:0.000854,udp_loss_dl:0.263048,udp_loss_ul:0.787980,ping:42.735000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:35:37',tcp_dl:8145.560000,tcp_ul:9286.910000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2380.000000,udp_dl:7984.750000,udp_ul:9561.420000,udp_jitter_dl:0.000883,udp_jitter_ul:0.001125,udp_loss_dl:0.022422,udp_loss_ul:0.995854,ping:42.832000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:36:37',tcp_dl:8040.870000,tcp_ul:8893.850000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3273.000000,udp_dl:7932.760000,udp_ul:9561.140000,udp_jitter_dl:0.001633,udp_jitter_ul:0.000391,udp_loss_dl:0.015153,udp_loss_ul:1.364994,ping:42.823000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:37:37',tcp_dl:8145.690000,tcp_ul:9283.270000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2335.000000,udp_dl:7394.490000,udp_ul:9561.760000,udp_jitter_dl:0.000967,udp_jitter_ul:0.000532,udp_loss_dl:0.000345,udp_loss_ul:1.070964,ping:42.819000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:38:37',tcp_dl:8136.300000,tcp_ul:9306.700000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1600.000000,udp_dl:8998.730000,udp_ul:9562.310000,udp_jitter_dl:0.001917,udp_jitter_ul:0.002369,udp_loss_dl:8.543872,udp_loss_ul:1.012378,ping:42.823000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:39:37',tcp_dl:8082.230000,tcp_ul:8499.810000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3095.000000,udp_dl:7918.980000,udp_ul:9559.310000,udp_jitter_dl:0.000947,udp_jitter_ul:0.000682,udp_loss_dl:0.006231,udp_loss_ul:1.487647,ping:42.737000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:40:37',tcp_dl:8145.250000,tcp_ul:9295.830000,tcp_retrans_dl:0.000000,tcp_retrans_ul:1805.000000,udp_dl:7864.140000,udp_ul:9560.680000,udp_jitter_dl:0.000949,udp_jitter_ul:0.002983,udp_loss_dl:0.014255,udp_loss_ul:1.017591,ping:42.799000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:41:37',tcp_dl:8134.240000,tcp_ul:8840.070000,tcp_retrans_dl:0.000000,tcp_retrans_ul:3499.000000,udp_dl:7955.220000,udp_ul:9560.460000,udp_jitter_dl:0.000973,udp_jitter_ul:0.001647,udp_loss_dl:0.018312,udp_loss_ul:1.304671,ping:42.841000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:42:37',tcp_dl:8129.280000,tcp_ul:9313.470000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2362.000000,udp_dl:7839.210000,udp_ul:8768.930000,udp_jitter_dl:0.001220,udp_jitter_ul:0.002749,udp_loss_dl:0.000620,udp_loss_ul:0.440428,ping:42.776000,ping_loss:0.000000});
+addDataPoint({timestamp:'2025-12-05 12:43:37',tcp_dl:8143.020000,tcp_ul:9290.700000,tcp_retrans_dl:0.000000,tcp_retrans_ul:2552.000000,udp_dl:7192.980000,udp_ul:9274.450000,udp_jitter_dl:0.000952,udp_jitter_ul:0.000660,udp_loss_dl:0.007342,udp_loss_ul:0.747590,ping:42.824000,ping_loss:0.000000});
+
+renderCharts();
+</script>
+</body>
+</html>

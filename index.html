@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reportes de Monitoreo • Coopelesca</title>
+  <style>
+    body { 
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; 
+      margin: 0; 
+      background: #0e7490; 
+    }
+    .wrap { 
+      max-width: 920px; 
+      margin: 0 auto; 
+      padding: 32px; 
+    }
+    header { 
+      background: linear-gradient(135deg,#00a8cc,#0891b2); 
+      color: #fff; 
+      padding: 32px; 
+      border-radius: 16px; 
+    }
+    h1 { 
+      margin: 0 0 8px 0; 
+      font-size: 28px; 
+    }
+    p { 
+      margin: 0; 
+      opacity: .9; 
+    }
+    .cards { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); 
+      gap: 16px; 
+      margin-top: 24px; 
+    }
+    .card { 
+      background: #fff; 
+      border-radius: 14px; 
+      padding: 16px; 
+      box-shadow: 0 6px 18px rgba(0,0,0,.08); 
+    }
+    .card h2 { 
+      margin: 0 0 6px 0; 
+      font-size: 18px; 
+      color: #0e7490; 
+    }
+    .card p { 
+      margin: 0 0 10px 0; 
+      color: #334155; 
+      font-size: 14px; 
+    }
+    .btn { 
+      display: inline-block; 
+      padding: 10px 14px; 
+      background: #00a8cc; 
+      color: #fff; 
+      border-radius: 8px; 
+      text-decoration: none; 
+      font-weight: 600; 
+    }
+    .btn:hover {
+      background: #0891b2;
+    }
+    footer { 
+      color: #e2e8f0; 
+      font-size: 12px; 
+      text-align: center; 
+      margin-top: 28px; 
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Reportes de Monitoreo</h1>
+      <p>Pruebas de homologación XS-GPON ONT XS-010X-Q.</p>
+    </header>
+    <div class="cards">
+      <div class="card">
+        <h2>Prueba de Referencia 10Gbps</h2>
+        <p>Prueba de velocidad a 10Gbps de referencia - 10 minutos.</p>
+        <a class="btn" href="Prueba_de_velocidad_a_10Gbps_de_referencia_10_minutos.html" target="_blank" rel="noopener">Abrir reporte</a>
+      </div>
+      <div class="card">
+        <h2>Prueba XS-GPON - 10 Minutos</h2>
+        <p>Monitoreo de rendimiento ONT XS-010X-Q por 10 minutos.</p>
+        <a class="btn" href="Prueba_XS-GPON_ONT_XS-010X-Q_10_minutos.html" target="_blank" rel="noopener">Abrir reporte</a>
+      </div>
+      <div class="card">
+        <h2>Prueba XS-GPON - 1 Hora</h2>
+        <p>Monitoreo de rendimiento ONT XS-010X-Q por 1 hora.</p>
+        <a class="btn" href="Prueba_XS-GPON_ONT_XS-010X-Q_1_hora.html" target="_blank" rel="noopener">Abrir reporte</a>
+      </div>
+      <div class="card">
+        <h2>Prueba XS-GPON - 14 Horas</h2>
+        <p>Monitoreo de rendimiento ONT XS-010X-Q por 14 horas.</p>
+        <a class="btn" href="Prueba_XS-GPON_ONT_XS-010X-Q_14_horas.html" target="_blank" rel="noopener">Abrir reporte</a>
+      </div>
+    </div>
+    <footer>© 2025 Coopelesca • Site estático para publicación</footer>
+  </div>
+</body>
+</html>
